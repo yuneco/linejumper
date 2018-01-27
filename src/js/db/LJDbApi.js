@@ -21,7 +21,7 @@ export default {
     const destid = ref.push().key;
     return ref.child(destid).update({
       destid, name, location: {lat, lng}
-    });
+    }).then(()=>{return destid});
   },
 
   createQueuer (destid, uid, price, {lat, lng}) {
@@ -34,7 +34,7 @@ export default {
       const uname = val.name;
       return ref.child(queuerid).update({
         queuerid, uid, uname, destid, price, location: {lat, lng}
-      });
+      }).then(()=>{return queuerid});
     });
 
   },
