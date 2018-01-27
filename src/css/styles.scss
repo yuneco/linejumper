@@ -1,0 +1,77 @@
+html, body, .container {
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	text-align:center;
+}
+
+hr {
+	margin:0px;
+	margin-top:10px;
+}
+
+h1,h2,h3 {
+	margin:0px;
+	padding:0;
+}
+
+nav, .navbar {
+	padding-bottom:0px;
+	margin-bottom:0px;
+}
+
+.navbar-brand {
+	display:inline-block;
+}
+
+.jumbotron {
+	height:50%;
+}
+
+.jumbotron .searchBar {
+}
+
+img.logo {
+	height:15px !important;
+	width:15px !important;
+	padding:15px;
+	display:inline-block;
+}
+
+.searchBar {
+	padding-top:5px;
+	width:500px;
+	height:50px;
+	text-align:center;
+	font-size:25px;
+	text-transform: uppercase;
+
+}
+
+footer {
+	position:fixed;
+	bottom:0;
+	width:100%;
+	height:50px;
+	background-color:#eee;
+}
+
+
+@media screen and (max-width: 480px) {
+
+	.searchBar {
+		width:300px;
+	}
+
+}
+
+@media only screen
+  and (min-device-width: 768px) {
+
+  .searchBar {
+  	width:500px;
+  }
+
+  }
+
