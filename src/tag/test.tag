@@ -45,6 +45,9 @@
       </pre>
 
 
+    <h1>Line Jumper Map</h1>
+
+
   </div>
 
   <script>
@@ -56,8 +59,9 @@
 
     // -------- sample code -----------
     this.codeCreateUser = `var api = App.apis.DbApi;
-if(!App.apis.LoginApi.user){return} // Not Logged in yet!
-api.createUser(App.apis.LoginApi.user.uid,App.apis.LoginApi.user.displayName);`;
+if(App.apis.LoginApi.user){ // Login After Only
+  api.createUser(App.apis.LoginApi.user.uid,App.apis.LoginApi.user.displayName);
+}`;
 
     this.codeCreateDestination = `var api = App.apis.DbApi;
 api.createDestination('Apple Store GINZA',{lat:35.672256, lng:139.765812})
