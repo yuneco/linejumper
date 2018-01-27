@@ -32,7 +32,7 @@
       </pre>
 
       <h2>watchQueuers</h2>
-      <p>Start to watch queuers of specified destination. Every time queuer update location, callback will be called. To stop watching, call this api again with no (=null) callback.</p>
+      <p>Start to watch queuers of specified destination. Every time queuer update its location, the callback will be called promptly. To stop watching, call this api again with no (=null) callback.</p>
       <pre>{codeWatchQueuers}
       </pre>
 
