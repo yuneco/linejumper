@@ -54,6 +54,8 @@
       <option each={ dests } value={ destid }>{ name }</option>
     </select>
     <button onclick={getDests}>get dest list</button>
+    <button onclick={beQueuer}>Be Queuer Here</button>
+    <button onclick={finQueuer}>Finish Queuer</button>
     <div id="map"></map>
 
   </div>
@@ -64,6 +66,21 @@
       height : 400px;
       border : 1px solid gray;
     }
+    #map .dest {
+      font-size : 0;
+    }
+    #map .dest:after {
+      font-size : 20pt;
+      content : '🌟';
+    }
+    #map .queuer {
+      font-size : 0;
+    }
+    #map .queuer:after {
+      font-size : 20pt;
+      content : '🕴';
+    }
+
   </style>
 
   <script>
@@ -80,7 +97,7 @@
       this.map = new App.apis.LJMapApiClass();
       this.map.createMap('map',{lat:45,lng:139},()=>{
         this.map.moveCurrentLocation(()=>{
-          this.map.addMarker('test');
+          //this.map.addMarker('test');
         });
       });
 
@@ -93,6 +110,23 @@
         this.update();
       })
     };
+
+    this.beQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      const destid = $('#dest-select').val();
+      this.map.getPos((location)=>{
+        api.createQueuer(destid,uid,20,location)
+        .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
+      });
+    }
+
+    this.finQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      api.finishQueuer(uid);
+    }
+
 
     this.setMapToDests = () => {
       const api = App.apis.DbApi;
