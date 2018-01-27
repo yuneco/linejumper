@@ -1,5 +1,6 @@
 import firebase from '../firebase/firebase.js';
 import FbCustomeRefBase from './FbCustomeRefBase.js';
+import DbApi from './LJDbApi';
 
 export default class FbLoginUserRef extends FbCustomeRefBase {
 
@@ -55,6 +56,7 @@ export default class FbLoginUserRef extends FbCustomeRefBase {
         // セッションを確立できたら、そのまま利用
         console.log('onAuthStateChanged: logged in', user);
         this.user = user;
+        DbApi.createUser(user.uid,user.displayName,user.photoURL);
       } else {
         // セッションを確立できなければ、ログイン要求
         if (!autoLogin) {

@@ -9,16 +9,15 @@ export default {
    * @param {string} name any name to display
    * @return {Promise}
    */
-  createUser (uid, name) {
+  createUser (uid, name, photo) {
     const ref = root.child(`users/${uid}`);
     return ref.update({
-      uid, name
+      uid, name, photo
     });
   },
 
-  createDestination (name, {lat, lng}) {
+  createDestination (name,destid,{lat, lng}) {
     const ref = root.child('dests');
-    const destid = ref.push().key;
     return ref.child(destid).update({
       destid, name, location: {lat, lng}
     }).then(()=>{return destid});
@@ -63,17 +62,32 @@ export default {
     root.child('queuers').orderByChild('destid').off();
     if(!onchange){return}
 
-    const ref = root.child('queuers').orderByChild('destid').equalTo(destid);
-    ref.on('value',snap=>{
-      const vals = snap.val();
-      const queuers = [];
-      Object.keys(vals).forEach(k=>{
-        queuers.push(vals[k]);
+    const destRef = root.child(`dests/${destid}`);
+    return destRef.once('value').then(snap=>{
+      const dest = snap.val();
+      const ref = root.child('queuers').orderByChild('destid').equalTo(destid);
+      ref.on('value',snap=>{
+        const vals = snap.val();
+        const queuers = [];
+        if(vals){
+          Object.keys(vals).forEach(k=>{
+            queuers.push(vals[k]);
+          });
+        }
+        onchange(dest,queuers);
       });
-      onchange(destid,queuers);
     });
-  }
+  },
 
+  /**
+   *
+   * @param {string} uid
+   * @return {Promise}
+   */
+  getUserInfo (uid) {
+    const ref = root.child(`users/${uid}`);
+    return ref.once('value').then(snap=>{return snap.val()});
+  }
 
 
 

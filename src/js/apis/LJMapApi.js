@@ -89,7 +89,7 @@ export default class LJMapApi {
     this.markers.forEach(m=>{
       m.remove();
     });
-    this.markers.length = -1;
+    this.markers.length = 0;
   }
 
 }

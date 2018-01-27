@@ -8,12 +8,13 @@ export default class CustomMarker extends google.maps.OverlayView {
     super();
     // color, authoravatar, mufoid, location, size, areascale
     this.setValues(opts);
+    this.className = className;
   }
 
   draw () {
     let div = this.div;
     if (!div) {
-      div = this.div = $('<div class="queuer-marker">⭐️</div>')[0];
+      div = this.div = $(`<div class="${this.className}">${this.className}</div>`)[0];
       div.style.position = 'absolute';
       div.style.width = '24px';
       div.style.height = '24px';
