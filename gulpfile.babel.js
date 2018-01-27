@@ -20,7 +20,6 @@ import browserify from 'browserify';
 import babelify from 'babelify';
 import source  from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
-import karma from 'karma';
 import eslint from 'gulp-eslint';
 
 
@@ -211,19 +210,7 @@ gulp.task("reload", () => {
     browserSync.reload();
 });
 
-//単体テスト
-gulp.task('test', (done)=>{
-    new karma.Server({
-      configFile: __dirname + '/karma.conf.js',
-      //singleRun: true,
-    }, done).start()
-  })
-gulp.task('testSingle', (done)=>{
-    new karma.Server({
-      configFile: __dirname + '/karma.conf.js',
-      singleRun: true,
-    }, done).start()
-  })
+
 
 // ビルド
 gulp.task("build", ["cpResource", "cpHtml", "script", "sass", "riot", "svg"]);
@@ -232,5 +219,3 @@ gulp.task("production", ["switch-production", "build"]);
 // 開始 : 最初に一式ビルドしてから監視を開始する
 gulp.task("default", ["build", "watch", "browserSync", "reload"]);
 
-// 開始（テスト）
-gulp.task("withTest", ["build", "watch", "browserSync", "reload", "test"]);
