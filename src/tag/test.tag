@@ -11,9 +11,7 @@
       <p>Try on dev console!</p>
 
       <h2>createUser</h2>
-      <p>Create user entity in DB. uid (1st param) must be current user's id. Other uid will be rejected.
-      You can get id using App.apis.LoginApi.user.uid after logged in.
-
+      <p>Forget me! This api automatically called when you logged-in.
       </p>
       <pre>{codeCreateUser}
       </pre>

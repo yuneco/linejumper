@@ -23,6 +23,23 @@ export default {
     }).then(()=>{return destid});
   },
 
+
+  finishQueuer (uid) {
+    const uref = root.child(`users/${uid}`);
+    return uref.once('value').then(snap=>{
+      const val = snap.val();
+      const queuerid = val.queuerid;
+      if(queuerid){
+        const updates = {
+          [`queuers/${queuerid}`]: null,
+          [`users/${uid}/queuerid`]: null
+        };
+        return root.update(updates);
+      }
+    });
+
+  },
+
   createQueuer (destid, uid, price, {lat, lng}) {
     const ref = root.child('queuers');
     const queuerid = ref.push().key;
@@ -33,10 +50,18 @@ export default {
       const uname = val.name;
       return ref.child(queuerid).update({
         queuerid, uid, uname, destid, price, location: {lat, lng}
-      }).then(()=>{return queuerid});
+      })
+      .then(()=>{
+          return uref.update({
+            queuerid
+          });
+        })
+      .then(()=>{return queuerid});
+
     });
 
   },
+
 
   updateQueuerLocation (queuerid, {lat, lng}) {
     const ref = root.child(`queuers/${queuerid}`);
