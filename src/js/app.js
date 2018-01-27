@@ -4,6 +4,7 @@ import router from './router.js';
 import firebase from './firebase/firebase';
 import DbApi from './apis/LJDbApi';
 import LoginApi from './apis/LoginApi';
+import LJMapApi from './apis/LJMapApi';
 
 class Application {
   constructor() {
@@ -12,7 +13,8 @@ class Application {
     this.DEBUG = true;
     this.apis = {
       DbApi,
-      LoginApi : new LoginApi()
+      LoginApi : new LoginApi(),
+      LJMapApiClass : LJMapApi
     }
   }
 

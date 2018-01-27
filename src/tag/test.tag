@@ -46,9 +46,21 @@
 
 
     <h1>Line Jumper Map</h1>
-
+    <select>
+      <option each={ dests }>{ name }</option>
+    </select>
+    <button onclick={getDests}>get dest list</button>
+    <div id="map"></map>
 
   </div>
+
+  <style>
+    #map {
+      width : 400px;
+      height : 400px;
+      border : 1px solid gray;
+    }
+  </style>
 
   <script>
     // login
@@ -56,6 +68,25 @@
       App.apis.LoginApi.loginWithGoogle();
     }
 
+    this.dests = [];
+
+    this.on('mount', ()=>{
+      const map = new App.apis.LJMapApiClass();
+      map.createMap('map',{lat:45,lng:139},()=>{
+        map.moveCurrentLocation(()=>{
+          map.addMarker('test');
+        });
+      });
+
+    });
+
+    this.getDests = () => {
+      const api = App.apis.DbApi;
+      api.getDestinations().then(dests=>{
+        this.dests = dests;
+        this.update();
+      })
+    };
 
     // -------- sample code -----------
     this.codeCreateUser = `var api = App.apis.DbApi;
