@@ -2,11 +2,19 @@
 
   <div id="test">
 
+      <h1 class="title">Line Jumper Login</h1>
+      <button onclick={loginWithGoogle}>Login with Google</button>
+      <p>After login complete, you can get user info with next code:</p>
+      <pre>App.apis.LoginApi.user</pre>
+
       <h1 class="title">Line Jumper DB API Test</h1>
       <p>Try on dev console!</p>
 
       <h2>createUser</h2>
-      <p>Create user entity in DB. This is just a mock. Need to use FirebaseAuth.</p>
+      <p>Create user entity in DB. uid (1st param) must be current user's id. Other uid will be rejected.
+      You can get id using App.apis.LoginApi.user.uid after logged in.
+
+      </p>
       <pre>{codeCreateUser}
       </pre>
 
@@ -40,8 +48,16 @@
   </div>
 
   <script>
+    // login
+    this.loginWithGoogle = ()=>{
+      App.apis.LoginApi.loginWithGoogle();
+    }
+
+
+    // -------- sample code -----------
     this.codeCreateUser = `var api = App.apis.DbApi;
-api.createUser('uid0001','YUKI');`;
+if(!App.apis.LoginApi.user){return} // Not Logged in yet!
+api.createUser(App.apis.LoginApi.user.uid,App.apis.LoginApi.user.displayName);`;
 
     this.codeCreateDestination = `var api = App.apis.DbApi;
 api.createDestination('Apple Store GINZA',{lat:35.672256, lng:139.765812})

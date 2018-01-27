@@ -2,7 +2,8 @@ import riot from 'riot';
 import RiotControl from 'riotcontrol';
 import router from './router.js';
 import firebase from './firebase/firebase';
-import DbApi from './db/LJDbApi';
+import DbApi from './apis/LJDbApi';
+import LoginApi from './apis/LoginApi';
 
 class Application {
   constructor() {
@@ -10,12 +11,14 @@ class Application {
     this.router = router;
     this.DEBUG = true;
     this.apis = {
-      DbApi
+      DbApi,
+      LoginApi : new LoginApi()
     }
   }
 
   init() {
     // Someting to init if need
+    this.apis.LoginApi.initLoginState(false);
     this.oninit();
   }
 
