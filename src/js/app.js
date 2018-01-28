@@ -27,7 +27,7 @@ class Application {
   oninit() {
 
     // mount app tag
-    riot.mount('app');
+    riot.mount('*');
 
     // start watch address bar url
     this.router.start(true);

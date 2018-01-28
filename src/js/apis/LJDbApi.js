@@ -48,8 +48,9 @@ export default {
     return uref.once('value').then(snap=>{
       const val = snap.val();
       const uname = val.name;
+      const uphoto = val.photo;
       return ref.child(queuerid).update({
-        queuerid, uid, uname, destid, price, location: {lat, lng}
+        queuerid, uid, uname, uphoto, destid, price, location: {lat, lng}
       })
       .then(()=>{
           return uref.update({
