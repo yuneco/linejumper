@@ -7,8 +7,8 @@
                     <a class="navbar-brand"><img title="" src="#" class="logo"/></a>
                     <a class="navbar-brand">Line Jumper</a>
                 </div>
-                <li><input type="text" class="searchBar" name="search" id="search" placeholder="Search">
-                <img class="btn" id="btn" src="img/search.png"/></li>
+                <input type="text" class="searchBar" name="search" id="search" placeholder="Search">
+                <img class="btn" id="btn" src="img/search.png"/>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                     </ul>
@@ -22,12 +22,7 @@
         <div class="jumbotron">
 <!--                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search"> -->
 
-<!-- 		  <div id="map"></div> -->
-		  <iframe id="map"
-  frameborder="0" style="border:0"
-  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBu2giCz9pbupJCZfr_GKXN4ipjsbyFqSQ
-    &q=CSUMB+Monterey+CA" allowfullscreen>
-</iframe>
+		  <div id="map"></div>
 
     	<div id="right-panel">
       		<h2>Results</h2>
@@ -90,36 +85,78 @@
 
         google.maps.event.addDomListener(window, 'load', init);
 
-        // function initMap() {
-//           map = new google.maps.Map(document.getElementById('map'), {
-//           zoom: countries['us'].zoom,
-//           center: countries['us'].center,
-//           mapTypeControl: false,
-//           panControl: false,
-//           zoomControl: false,
-//           streetViewControl: false
-//         });
-//
-//         infoWindow = new google.maps.InfoWindow({
-//           content: document.getElementById('info-content')
-//         });
-//
-//         // Create the autocomplete object and associate it with the UI input control.
-//         // Restrict the search to the default country, and to place type "cities".
-//         autocomplete = new google.maps.places.Autocomplete(
-//             /** @type {!HTMLInputElement} */ (
-//                 document.getElementById('autocomplete')), {
-//               types: ['(cities)'],
-//               componentRestrictions: countryRestrict
-//             });
-//         places = new google.maps.places.PlacesService(map);
-//
-//         autocomplete.addListener('place_changed', onPlaceChanged);
-//
-//         // Add a DOM event listener to react when the user selects a country.
-//         document.getElementById('country').addEventListener(
-//             'change', setAutocompleteCountry);
-//         }
+        this.loginWithGoogle = ()=>{
+      App.apis.LoginApi.loginWithGoogle();
+    }
+
+    this.dests = [];
+    this.map = null;
+    this.mapDestid = null;
+
+    this.on('mount', ()=>{
+      this.map = new App.apis.LJMapApiClass();
+      this.map.createMap('map',{lat:45,lng:139},()=>{
+        this.map.moveCurrentLocation(()=>{
+          //this.map.addMarker('test');
+        });
+      });
+
+    });
+
+    this.getDests = () => {
+      const api = App.apis.DbApi;
+      api.getDestinations().then(dests=>{
+        this.dests = dests;
+        this.update();
+      })
+    };
+
+    this.beQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      const destid = $('#dest-select').val();
+      this.map.getPos((location)=>{
+        const dist = Math.round(this.map.getDist(location),3);
+        const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
+        api.createQueuer(destid,uid,20,location)
+        .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
+      });
+    }
+
+    this.finQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      api.finishQueuer(uid);
+    }
+
+
+    this.setMapToDests = () => {
+      const api = App.apis.DbApi;
+      const destid = $('#dest-select').val();
+      let isInited = false;
+      // start to watch
+      api.watchQueuers(destid,(dest,queuers)=>{
+        if(!isInited){
+          console.log('dest',dest,dest.location);
+          this.map.moveLocation(dest.location);
+          this.map.addMarker('dest',dest.location);
+          isInited = true;
+        }
+        this.map.clearMarkers();
+        // add queuer marker
+        queuers.forEach(q=>{
+          console.log('queuer',q.location);
+          const qm = this.map.addMarker('queuer',q.location,q);
+          qm.addListener(()=>{
+            const uid = q.uid;
+            const price = q.price;
+            comfirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
+          });
+        })
+      });
+
+    };
+
 
         </script>
 
