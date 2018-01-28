@@ -1,11 +1,11 @@
 <home>
         <div class="container">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-default bg-light">
+        <nav class="navbar navbar-expand-lg green ">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand"><img title="" src="#" class="logo"/></a>
-                    <a class="navbar-brand">Line Jumper</a>
+<!--                 <div class="logo"></div> -->
+                    <a class="navbar-brand"><img title="" src="img/logo.png" class="logo"/></a>
                 </div>
                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search">
                 <img class="btn" id="btn" onclick={getResults} src="img/search.png"/>
@@ -30,13 +30,17 @@
         <span id="place-address"></span>
       </div>
 
-    	<div id="right-panel">
-      		<h2>Results</h2>
-      		<ul id="places"></ul>
-      		<button id="more">More results</button>
-    	</div>
 
-      <table>
+    </div>
+
+    <div class="container-fluid" id="result-info">
+      <div class="row-fluid">
+      <div class="column col-xs-16 col-sm-8 col-md-8 col-lg-8">
+
+      <div id="left-panel">
+      <h2>Queuers</h2>
+      <hr/>
+      <table id="queuers">
         <thead>
           <tr>
             <th>USER</th>
@@ -59,28 +63,24 @@
 
         </div>
       </div>
-      <div class="container-fluid" id="result-info">
-           <div class="row-fluid">
-           <div class="column col-xs-8 col-sm-8 col-md-4 col-lg-8">
-              <div id="left-panel">
-                  <h2>Queuers</h2>
-                  <hr/>
-              </div>
+      </div>
+
+      <div class="column col-xs-16 col-sm-4 col-md-4 col-lg-4">
+      <div id="right-panel">
+      		<h2>Results</h2>
+      		<hr/>
+      		<table id="results">
+      		<tbody></tbody>
+      		</table>
+    	</div>
            </div>
-           <div class="column col-xs-4 col-sm-4 col-md-4 col-lg-4">
-               <div id="right-panel">
-      		        <h2>Results</h2>
-      		        <hr/>
-      		        <table id="results">
-      		          <tbody></tbody>
-      		        </table>
-    	          </div>
+
     	      </div>
     	    </div>
     	</div>
-    </div>
 
-    <div class="" style="z-index:300; margin-top:100px;">
+   <!--
+ <div class="" style="z-index:300; margin-top:100px;">
     <select id="dest-select" onchange={ setMapToDests }>
       <option each={ dests } value={ destid }>{ name }</option>
     </select>
@@ -89,6 +89,7 @@
     <button onclick={finQueuer}>Finish Queuer</button>
 
     </div>
+ -->
 
 <style scoped>
   #infowindow-content {
@@ -101,6 +102,10 @@
     width : 32px;
     height : 32px;
     border-radius: 10px;
+  }
+
+  body, .container {
+    background-color:#fff;
   }
 </style>
 
@@ -216,17 +221,6 @@
 
     };
 
-    // this.updateMap = () => {
-//           this.map = new App.apis.LJMapApiClass();
-//           this.map.createMap('map',{lat:this.lat,lng:this.lng},()=>{
-//           this.map.moveCurrentLocation(()=>{
-//
-//           console.log(lat);
-//           console.log(lng);
-//         });
-//       });
-//     };
-
     this.getResults = () => {
 
         if(results==null) {
@@ -234,10 +228,6 @@
                 $("#results > tbody").empty();
             }
         var city = $('#search').val()
-            // if(results) {
-//                 results = "";
-//                 $("#results > tbody").empty();
-//             }
 
             var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+encodeURIComponent(city)+"&key=AIzaSyAMf1KTIzyqQqLf1QmNic4xcq7hGp_wE7s";
             $.getJSON(url, function(val) {
