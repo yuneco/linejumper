@@ -70,7 +70,7 @@
   		padding:50px;
   		text-align:left;
   		font-size:20px;
-  		background-color:#A0DB6F;
+  		background-color:#A0D96E;
   }
 
   .tagline {
