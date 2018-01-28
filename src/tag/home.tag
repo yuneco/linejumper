@@ -264,7 +264,9 @@
       const queuer = ev.item;
       const isBuy = confirm(`Are you shure you want to buy this location from ${queuer.uname} at a charge of $${queuer.price}`);
       if(isBuy){
-
+        App.apis.DbApi.buyPosition(this.myuid, queuer.queuerid).then(()=>{
+          document.location.hash = 'recept';
+        });
       }
     }
 
