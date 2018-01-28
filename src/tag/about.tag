@@ -103,11 +103,11 @@
 
   }
 
-  @media screen and (max-device-width: 780px) {
+  @media screen and (min-device-width: 780px) {
   	.tagline {
   		margin-top:-150px;
   		margin-bottom:30px;
-  		font-size:18px;
+  		font-size:16px;
   		color:#EF7778;
   	}
   }
