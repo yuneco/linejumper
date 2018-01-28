@@ -138,6 +138,32 @@ export default {
   getUserInfo (uid) {
     const ref = root.child(`users/${uid}`);
     return ref.once('value').then(snap=>{return snap.val()});
+  },
+
+  buyPosition (myuid, queuerid) {
+    const qref = root.child(`queuers/${queuerid}`);
+    let queuer = null;
+    return qref.once('value').then(qsnap=>{
+      queuer = qsnap.val();
+      qref.set(null);
+    }).then(()=>{
+      const uref = root.child(`users/${myuid}`);
+      return uref.update({
+        boughtQueuer : queuer
+      });
+    });
+  },
+
+  getBoughtPosition (myuid) {
+    const uref = root.child(`users/${myuid}/boughtQueuer`);
+    return uref.once('value').then(snap=>{
+      return snap.val();
+    });
+  },
+
+  clearBoughtPosition (myuid) {
+    const uref = root.child(`users/${myuid}`);
+    return uref.update({boughtQueuer:null});
   }
 
 

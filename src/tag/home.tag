@@ -117,6 +117,7 @@
           this.myuid = App.apis.LoginApi.user ? App.apis.LoginApi.user.uid : null;
           if(!this.myuid){
             document.location.hash = 'login';
+            return;
           }
 
           this.map = new App.apis.LJMapApiClass();
@@ -255,7 +256,9 @@
       const queuer = ev.item;
       const isBuy = confirm(`Are you sure you want to buy this location from ${queuer.uname} for a charge of $${queuer.price}`);
       if(isBuy){
-
+        App.apis.DbApi.buyPosition(this.myuid, queuer.queuerid).then(()=>{
+          document.location.hash = 'recept';
+        });
       }
     }
 
