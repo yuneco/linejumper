@@ -13,6 +13,10 @@ route('/about', () => {
   riot.mount('stage', 'about');
 });
 
+route('/recept', () => {
+  riot.mount('stage', 'recept');
+});
+
 route('/login', () => {
   riot.mount('stage', 'login');
 });

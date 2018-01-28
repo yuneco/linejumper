@@ -22,38 +22,7 @@
     color: #ffffff;
     padding: 10px 20px;
     background-color:#ef7778;
-    /*
-background: -moz-linear-gradient(
-      top,
-      #ffffff 0%,
-      #f02f17 50%,
-      #ef7778 50%,
-      #b5b5b5);
-    background: -webkit-gradient(
-      linear, left top, left bottom,
-      from(#ffffff),
-      color-stop(0.50, #f02f17),
-      color-stop(0.25, #ef7778),
-      to(#b5b5b5));
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    border: 1px solid #949494;
-    -moz-box-shadow:
-      0px 1px 3px rgba(000,000,000,0.5),
-      inset 0px 0px 2px rgba(255,255,255,1);
-    -webkit-box-shadow:
-      0px 1px 3px rgba(000,000,000,0.5),
-      inset 0px 0px 2px rgba(255,255,255,1);
-    box-shadow:
-      0px 1px 3px rgba(000,000,000,0.5),
-      inset 0px 0px 2px rgba(255,255,255,1);
-    text-shadow:
-      0px -1px 0px rgba(000,000,000,0.2),
-      0px 1px 0px rgba(255,255,255,1);
- */
     border-radius:25px;
-
   }
 </style>
 
