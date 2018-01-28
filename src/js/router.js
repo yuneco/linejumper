@@ -21,4 +21,8 @@ route('/login', () => {
   riot.mount('stage', 'login');
 });
 
+route('/', () => {
+  riot.mount('stage', 'login');
+});
+
 export default route;
