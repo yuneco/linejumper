@@ -1,6 +1,8 @@
 <login>
 
   <div class="title">
+<!--   <embed src="inc/Logo.mp4" width="600" height="400" scale="aspect" controller="False"> -->
+<!--   <video width="90%" height="400" autoplay="autoplay"><source src="inc/Logo.mp4" type="video/mp4"/></video> -->
   </div><br/>
   <h3 style="margin-top:-150px;margin-bottom:100px;">Save your time.</h3>
 
@@ -9,7 +11,7 @@
 <style scoped>
   .title {
     height: 50%;
-    background-image: url('img/logo.png');
+    background-image: url('inc/Logo.gif');
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: center center;
