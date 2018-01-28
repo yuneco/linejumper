@@ -15,10 +15,9 @@ export default class FbLoginUserRef extends FbCustomeRefBase {
 
   // ログアウト
   logout() {
-    clearInterval(this._activeUpdateTimer);
-    firebase.auth().signOut().then(() => {
+    return firebase.auth().signOut().then(() => {
       this._trigger('loggedout');
-      this._userRef.watchUser(null);
+      this.user = null;
     }, (error) => {
       console.warn('Logout failed');
     });

@@ -23,12 +23,38 @@
 <!--                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search"> -->
 
 		  <div id="map"></div>
+      <div id="infowindow-content">
+        <img id="place-icon" src="" height="16" width="16">
+        <span id="place-name"  class="title"></span><br>
+        Place ID <span id="place-id"></span><br>
+        <span id="place-address"></span>
+      </div>
 
     	<div id="right-panel">
       		<h2>Results</h2>
       		<ul id="places"></ul>
       		<button id="more">More results</button>
     	</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>USER</th>
+            <th>DISTANCE</th>
+            <th>PRICE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr each={activeQueuers}>
+            <td><img class="user-photo-small" src={ uphoto }>{ uname }</td>
+            <td> not yet </td>
+            <td>{ price }</td>
+          </tr>
+        </tbody>
+      </table>
+      <button hide={ !activeDestid || isQueuer } onclick={ beQueuer }>I'm in this line! Sell my place!</buttom>
+      <button show={  activeDestid && isQueuer } onclick={ finQueuer }>Cancel to sell :(</buttom>
+
         </div>
 
         <!-- Content -->
@@ -67,6 +93,20 @@
         </div>
  -->
 
+<style scoped>
+  #infowindow-content {
+    display: none;
+  }
+  #map #infowindow-content {
+    display: inline;
+  }
+  .user-photo-small {
+    width : 32px;
+    height : 32px;
+    border-radius: 10px;
+  }
+</style>
+
         <script>
         this.on('mount',()=>{
           document.getElementById('btn').addEventListener("click", function() {
@@ -85,19 +125,27 @@
 
         google.maps.event.addDomListener(window, 'load', init);
 
-        this.loginWithGoogle = ()=>{
-      App.apis.LoginApi.loginWithGoogle();
-    }
-
     this.dests = [];
     this.map = null;
-    this.mapDestid = null;
+    this.activeDestid = null;
+    this.activeQueuers = [];
+    this.isQueuer = false;
 
     this.on('mount', ()=>{
       this.map = new App.apis.LJMapApiClass();
       this.map.createMap('map',{lat:45,lng:139},()=>{
         this.map.moveCurrentLocation(()=>{
           //this.map.addMarker('test');
+        });
+        this.map.map.addListener('click',(ev)=>{
+          console.log(ev);
+          this.map.getPlaceInformation(ev.placeId,(place)=>{
+            const location = place.geometry.location;
+            App.apis.DbApi.createDestination(place.name,place.place_id,{lat:location.lat(),lng:location.lng()}).then(()=>{
+              this.activeDestid = ev.placeId;
+              this.setMapToDests();
+            });
+          });
         });
       });
 
@@ -114,11 +162,11 @@
     this.beQueuer = () => {
       const api = App.apis.DbApi;
       const uid = App.apis.LoginApi.user.uid;
-      const destid = $('#dest-select').val();
+      const destid = this.activeDestid;
       this.map.getPos((location)=>{
         const dist = Math.round(this.map.getDist(location),3);
         const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
-        api.createQueuer(destid,uid,20,location)
+        api.createQueuer(destid,uid,price,location)
         .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
       });
     }
@@ -132,27 +180,27 @@
 
     this.setMapToDests = () => {
       const api = App.apis.DbApi;
-      const destid = $('#dest-select').val();
+      const uid = App.apis.LoginApi.user.uid;
+      const destid = this.activeDestid;
       let isInited = false;
       // start to watch
       api.watchQueuers(destid,(dest,queuers)=>{
+        this.map.clearMarkers();
         if(!isInited){
           console.log('dest',dest,dest.location);
           this.map.moveLocation(dest.location);
           this.map.addMarker('dest',dest.location);
           isInited = true;
         }
-        this.map.clearMarkers();
         // add queuer marker
+        this.isQueuer = false;
         queuers.forEach(q=>{
           console.log('queuer',q.location);
           const qm = this.map.addMarker('queuer',q.location,q);
-          qm.addListener(()=>{
-            const uid = q.uid;
-            const price = q.price;
-            comfirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
-          });
-        })
+          if(q.uid === uid){this.isQueuer = true}
+        });
+        this.activeQueuers = queuers;
+        this.update();
       });
 
     };

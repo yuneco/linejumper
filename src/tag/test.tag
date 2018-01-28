@@ -118,7 +118,7 @@
       this.map.getPos((location)=>{
         const dist = Math.round(this.map.getDist(location),3);
         const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
-        api.createQueuer(destid,uid,20,location)
+        api.createQueuer(destid,uid,price,location)
         .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
       });
     }
@@ -147,11 +147,12 @@
         queuers.forEach(q=>{
           console.log('queuer',q.location);
           const qm = this.map.addMarker('queuer',q.location,q);
-          qm.addListener(()=>{
-            const uid = q.uid;
-            const price = q.price;
-            comfirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
-          });
+          google.maps.event.addListener(qm, 'click', ()=>{alert(1)});
+          //qm.addListener(()=>{
+          //  const uid = q.uid;
+          //  const price = q.price;
+          //  confirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
+          //});
         })
       });
 
