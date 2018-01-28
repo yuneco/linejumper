@@ -33,6 +33,15 @@ export default class LJMapApi {
     return distance;
   }
 
+  getDistFrom ({lat,lng}, {lat2,lng2}) {
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(lat ,lng ),
+      new google.maps.LatLng(lat2,lng2)
+    );
+    return distance;
+  }
+
+
   createMap (elemid, {lat,lng}, callback) {
     this.map = new google.maps.Map(document.getElementById(elemid));
     this.opts = {
