@@ -9,8 +9,8 @@ route('/home', () => {
   riot.mount('stage', 'home');
 });
 
-route('/open', () => {
-  riot.mount('stage', 'open');
+route('/about', () => {
+  riot.mount('stage', 'about');
 });
 
 route('/recept', () => {

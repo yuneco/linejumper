@@ -1,8 +1,8 @@
 <login>
 
   <div class="title">
-
-  </div>
+  </div><br/>
+  <h3 style="margin-top:-150px;margin-bottom:100px;">Save your time.</h3>
 
 <button class="login-google-btn" onclick={loginWithGoogle} ><i class="fa fa-google" aria-hidden="true"></i> Login with Google</button>
 
@@ -18,20 +18,22 @@
 
   .login-google-btn {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    color: #050505;
+    font-size: 25px;
+    color: #ffffff;
     padding: 10px 20px;
-    background: -moz-linear-gradient(
+    background-color:#ef7778;
+    /*
+background: -moz-linear-gradient(
       top,
       #ffffff 0%,
-      #ebebeb 50%,
-      #dbdbdb 50%,
+      #f02f17 50%,
+      #ef7778 50%,
       #b5b5b5);
     background: -webkit-gradient(
       linear, left top, left bottom,
       from(#ffffff),
-      color-stop(0.50, #ebebeb),
-      color-stop(0.50, #dbdbdb),
+      color-stop(0.50, #f02f17),
+      color-stop(0.25, #ef7778),
       to(#b5b5b5));
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -49,6 +51,9 @@
     text-shadow:
       0px -1px 0px rgba(000,000,000,0.2),
       0px 1px 0px rgba(255,255,255,1);
+ */
+    border-radius:25px;
+
   }
 </style>
 
