@@ -86,7 +86,7 @@ img.btn {
 	margin-top:20%;
 }
 
-iframe#map {
+#map {
   padding:0;
   height: 400px;
   width:100%;
@@ -124,32 +124,20 @@ iframe#map {
         background: #fff;
       }
 
-      // h2 {
-//         font-size: 22px;
-//         margin: 0 0 5px 0;
-//       }
-//       ul {
-//         list-style-type: none;
-//         padding: 0;
-//         margin: 0;
-//         height: 271px;
-//         width: 200px;
-//         overflow-y: scroll;
-//       }
-//       li {
-//         background-color: #f1f1f1;
-//         padding: 10px;
-//         text-overflow: ellipsis;
-//         white-space: nowrap;
-//         overflow: hidden;
-//       }
-//       li:nth-child(odd) {
-//         background-color: #fcfcfc;
-//       }
-//       #more {
-//         width: 100%;
-//         margin: 5px 0 0 0;
-//       }
+#map .dest {
+      font-size : 0;
+    }
+#map .dest:after {
+      font-size : 20pt;
+      content : '🌟';
+    }
+#map .queuer {
+      font-size : 0;
+    }
+#map .queuer:after {
+      font-size : 20pt;
+      content : '🕴';
+    }
 
 @media only screen and (min-device-width:768px){
 #content {
