@@ -1,6 +1,15 @@
 import firebase from '../firebase/firebase';
 const root = firebase.database().ref();
 
+const getDistFrom = (loc1, loc2)=>{
+  const distance = google.maps.geometry.spherical.computeDistanceBetween(
+    new google.maps.LatLng(loc1.lat ,loc1.lng ),
+    new google.maps.LatLng(loc2.lat,loc2.lng)
+  );
+  return distance;
+}
+
+
 export default {
 
   /**
@@ -23,22 +32,34 @@ export default {
     }).then(()=>{return destid});
   },
 
-
   finishQueuer (uid) {
-    const uref = root.child(`users/${uid}`);
-    return uref.once('value').then(snap=>{
-      const val = snap.val();
-      const queuerid = val.queuerid;
-      if(queuerid){
-        const updates = {
-          [`queuers/${queuerid}`]: null,
-          [`users/${uid}/queuerid`]: null
-        };
-        return root.update(updates);
-      }
+    const qref = root.child('queuers').orderByChild('uid').equalTo(uid);
+    const updates = {};
+    return qref.once('value').then(snap=>{
+      const vals = snap.val();
+      Object.keys(vals).forEach(queuerid=>{
+        updates[queuerid] = null;
+      });
+      return root.child('queuers').update(updates);
+    }).then(()=>{
+      root.child(`users/${uid}`).update({queuerid:null});
     });
-
   },
+
+  // finishQueuer (uid) {
+  //   const uref = root.child(`users/${uid}`);
+  //   return uref.once('value').then(snap=>{
+  //     const val = snap.val();
+  //     const queuerid = val.queuerid;
+  //     if(queuerid){
+  //       const updates = {
+  //         [`queuers/${queuerid}`]: null,
+  //         [`users/${uid}/queuerid`]: null
+  //       };
+  //       return root.update(updates);
+  //     }
+  //   });
+  // },
 
   createQueuer (destid, uid, price, {lat, lng}) {
     const ref = root.child('queuers');
@@ -97,7 +118,11 @@ export default {
         const queuers = [];
         if(vals){
           Object.keys(vals).forEach(k=>{
-            queuers.push(vals[k]);
+            const q = vals[k];
+            const distance = getDistFrom(q.location, dest.location);
+            q.distance = Math.round(distance);
+            console.log(q.location, dest.location);
+            queuers.push(q);
           });
         }
         onchange(dest,queuers);

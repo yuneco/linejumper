@@ -29,8 +29,16 @@ h1,h2,h3 {
 	z-index:10;
 }
 
-.green {
-  background-color:#A0DB6F !important;
+
+
+.green, .green a{
+  color:#A0DB6F;
+  padding-left:200px;
+  font-weight:bold;
+}
+
+.green :hover, a:hover {
+  color:#ef7778 !important;
 }
 
 nav, .navbar {
@@ -84,10 +92,14 @@ hr{
   border-top: 1px solid #EF7778;
 }
 
-img.logo {
+.logo {
   background-image: url('img/logo.png');
-	height:15px !important;
-	padding:15px;
+	height:50px !important;
+	width:150px;
+	padding:5px;
+	left:20px;
+	z-index:700;
+	position:fixed;
 }
 
 #results {
@@ -204,7 +216,7 @@ img.btn {
 @media screen and (max-device-width: 480px) {
 
 	.searchBar {
-		width:100px;
+		width:350px !important;
 	}
 
 	#content {
@@ -217,9 +229,23 @@ img.btn {
 	  display:none;
 	}
 
+	#map {
+	  height:300px;
+	}
+
 	#result-info{
 	  margin-top:120%;
 	}
+
+	.logo {
+  background-image: url('img/logo.png');
+	height:50px !important;
+	width:150px;
+	padding:5px;
+	z-index:700;
+	position:fixed;
+	margin:auto;
+}
 
 }
 
