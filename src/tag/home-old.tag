@@ -1,11 +1,11 @@
 <home>
         <div class="container">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg green ">
             <div class="container-fluid">
-            <img title="" src="img/logo.png" class="logo"/>
                 <div class="navbar-header">
-                    <a class="navbar-brand green" onclick={about}>About Us</a>
+<!--                 <div class="logo"></div> -->
+                    <a class="navbar-brand"><img title="" src="img/logo.png" class="logo"/></a>
                 </div>
                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search">
                 <img class="btn" id="btn" onclick={getResults} src="img/search.png"/>
@@ -30,6 +30,19 @@
         <span id="place-address"></span>
       </div>
 
+<<<<<<< HEAD
+
+    </div>
+
+    <div class="container-fluid" id="result-info">
+      <div class="row-fluid">
+      <div class="column col-xs-16 col-sm-8 col-md-8 col-lg-8">
+
+      <div id="left-panel">
+      <h2>Queuers</h2>
+      <hr/>
+      <table id="queuers">
+=======
     	<div hide={ activeQueuers && activeQueuers.length } id="right-panel">
       		<h2>Results</h2>
       		<ul id="places"></ul>
@@ -37,6 +50,7 @@
     	</div>
 
       <table class="table">
+>>>>>>> c8ecceb89bb9a15bdd5262c72f56b23962d6e612
         <thead>
           <tr>
             <th>USER</th>
@@ -56,14 +70,42 @@
         </tbody>
       </table>
       <button class="btn-no-border" hide={ !activeDestid || isQueuer } onclick={ beQueuer } ><i class="fa fa-tags" aria-hidden="true"></i> I'm in this line! Sell my place!</buttom>
-      <button class="btn-no-border" show={  activeDestid && isQueuer } onclick={ finQueuer }><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel Your Sale</buttom>
+      <button class="btn-no-border" show={  activeDestid && isQueuer } onclick={ finQueuer }><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel to sell</buttom>
 
         </div>
       </div>
+      </div>
 
+      <div class="column col-xs-16 col-sm-4 col-md-4 col-lg-4">
+      <div id="right-panel">
+      		<h2>Results</h2>
+      		<hr/>
+      		<table id="results">
+      		<tbody></tbody>
+      		</table>
     	</div>
+           </div>
+
+    	      </div>
+    	    </div>
+    	</div>
+<<<<<<< HEAD
+
+   <!--
+ <div class="" style="z-index:300; margin-top:100px;">
+    <select id="dest-select" onchange={ setMapToDests }>
+      <option each={ dests } value={ destid }>{ name }</option>
+    </select>
+    <button onclick={getDests}>get dest list</button>
+    <button onclick={beQueuer}>Be Queuer Here</button>
+    <button onclick={finQueuer}>Finish Queuer</button>
+
+    </div>
+ -->
+=======
     </div>
     <div class="processing-overlay" show={ processing }></div>
+>>>>>>> c8ecceb89bb9a15bdd5262c72f56b23962d6e612
 
 <style scoped>
   #infowindow-content {
@@ -83,17 +125,15 @@
     border : none;
     text-decoration: underline;
   }
-
-  .container {
-   background-color:#fff;
-   color:#668C47;
-   overlay:scroll;
-   z-index:600;
-  }
-
   .text-left {
     text-align : left;
   }
+<<<<<<< HEAD
+
+  body, .container {
+    background-color:#fff;
+  }
+=======
   .processing-overlay {
     position: absolute;
     z-index : 10000;
@@ -105,6 +145,7 @@
     left: 0;
   }
 
+>>>>>>> c8ecceb89bb9a15bdd5262c72f56b23962d6e612
 </style>
 
       <script>
@@ -196,12 +237,12 @@
       this.map.getPos((location)=>{
         const dist = Math.round(this.map.getDist(location),3);
         if(!dist){
-          alert('Sorry, we cannot detect your location. Turn on location service and try again.');
+          alert('Can not detect your location. Turn on location service and try again.');
           endProcessing();
           return;
         }
         if(dist > MAX_DIST){
-          alert('You are too far from destination. Select the right destination, and try again.');
+          alert('You are too far from destination. Select right destination, then try again.');
           endProcessing();
           return;
         }
@@ -251,19 +292,15 @@
       });
     };
 
+<<<<<<< HEAD
+=======
     this.buyHere = (ev)=>{
       const queuer = ev.item;
-      const isBuy = confirm(`Are you sure you want to buy this location from ${queuer.uname} for a charge of $${queuer.price}`);
+      const isBuy = confirm(`Are you shure you want to buy this location from ${queuer.uname} at a charge of $${queuer.price}`);
       if(isBuy){
 
       }
     }
-
-    this.about = ()=>{
-        window.clearInterval(this.timerid);
-        // move to about
-        window.document.location.hash = 'about';
-    };
 
     // this.updateMap = () => {
 //           this.map = new App.apis.LJMapApiClass();
@@ -276,6 +313,7 @@
 //       });
 //     };
 
+>>>>>>> c8ecceb89bb9a15bdd5262c72f56b23962d6e612
     this.getResults = () => {
 
         if(results==null) {
@@ -283,10 +321,6 @@
                 $("#results > tbody").empty();
             }
         var city = $('#search').val()
-            // if(results) {
-//                 results = "";
-//                 $("#results > tbody").empty();
-//             }
 
             var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+encodeURIComponent(city)+"&key=AIzaSyAMf1KTIzyqQqLf1QmNic4xcq7hGp_wE7s";
             $.getJSON(url, function(val) {
