@@ -1,7 +1,7 @@
 <about>
 <div id="about-page">
 <div class="home" onclick={home}></div>
-<div class="title"></div>
+<div class="title" onclick={home}></div>
 <h3 class="tagline">Save your time.</h3>
 
 <About-Us>
@@ -22,18 +22,24 @@
 
 	About-Us {
 		margin:auto;
+		background-color:#fff !important;
+		position:relative;
 	}
 
 	.home {
     height: 100px;
     width: 100px;
     left:20px;
+    margin:10px;
+    z-index:600;
     position:fixed;
     background-image: url('img/home.png');
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: center center;
-
+    cursor: pointer;
+    background-color:#ef7778;
+    border-radius:50px;
   }
 
 	.title {
@@ -42,6 +48,7 @@
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: center center;
+    position:relative;
 
   }
 
@@ -50,6 +57,9 @@
   	height:100%;
     background-color:#fff !important;
     text-align:center;
+    overflow:scroll;
+    position:fixed;
+    padding-bottom:50px;
   }
 
   #section {
@@ -64,8 +74,9 @@
   }
 
   .tagline {
-  		margin-top:-80px;
+  		margin-top:80px;
   		margin-bottom:30px;
+  		font-size:20px;
   		color:#EF7778;
   	}
 
@@ -75,7 +86,7 @@
   	}
 
   	.tagline {
-  		margin-top:-70px;
+  		margin-top:-50px;
   		margin-bottom:30px;
   		font-size:12px;
   		color:#EF7778;
@@ -90,8 +101,8 @@
   	}
 
   	.home {
-    height: 70px;
-    width: 70px;
+    height: 50px;
+    width: 50px;
     left:10px;
     position:fixed;
     background-image: url('img/home.png');
@@ -103,14 +114,16 @@
 
   }
 
-  @media screen and (min-device-width: 780px) {
-  	.tagline {
-  		margin-top:-150px;
+  @media screen and (min-device-width: 480px) {
+   	.tagline {
+  		margin-top:-70px;
   		margin-bottom:30px;
-  		font-size:16px;
+  		font-size:20px;
   		color:#EF7778;
   	}
-  }
+
+   }
+
 
 </style>
 
@@ -120,6 +133,7 @@
         // move to home
         window.document.location.hash = 'home';
     };
+
 </script>
 
 </about>
