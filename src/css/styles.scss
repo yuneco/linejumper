@@ -29,17 +29,33 @@ h1,h2,h3 {
 	z-index:10;
 }
 
-
-
-.green, .green a{
-  // color:#A0DB6F;
-  color: #668C47;
-  padding-left:200px;
-  font-weight:bold;
+.green {
+    background-color:#A0DB6F;
 }
 
-.green :hover, a:hover {
-  color:#ef7778 !important;
+.navbar-brand.pink {
+    margin-left: 200px !important;
+    height: 40px;
+    margin-top: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+.pink, .pink a{
+  background-color: #ef7778;
+  color:white;
+  height:20px;
+  margin-left:200px;
+  border-radius:25px;
+  padding-left:20px;
+  padding-right:20px;
+  font-weight:bold;
+  cursor: pointer;
+}
+
+.pink :hover, a:hover {
+  color:#A0DB6F !important;
 }
 
 nav, .navbar {
@@ -219,6 +235,15 @@ img.btn {
 	.searchBar {
 		width:350px !important;
 	}
+
+	.navbar-brand.pink {
+    margin-left: 220px !important;
+    height: 40px;
+    width: 130px;
+    margin-top: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 	#content {
 		z-index:100;

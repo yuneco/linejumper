@@ -1,11 +1,12 @@
 <home>
         <div class="container">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg green">
             <div class="container-fluid">
             <img title="" src="img/logo.png" class="logo"/>
+            <a class="navbar-brand pink" onclick={about}>About Us</a>
                 <div class="navbar-header">
-                    <a class="navbar-brand green" onclick={about}>About Us</a>
+
                 </div>
                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search">
                 <img class="btn" id="btn" onclick={getResults} src="img/search.png"/>
@@ -286,10 +287,7 @@
                 $("#results > tbody").empty();
             }
         var city = $('#search').val()
-            // if(results) {
-//                 results = "";
-//                 $("#results > tbody").empty();
-//             }
+
 
             var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+encodeURIComponent(city)+"&key=AIzaSyAMf1KTIzyqQqLf1QmNic4xcq7hGp_wE7s";
             $.getJSON(url, function(val) {
