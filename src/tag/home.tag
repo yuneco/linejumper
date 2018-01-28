@@ -30,13 +30,13 @@
         <span id="place-address"></span>
       </div>
 
-    	<div id="right-panel">
+    	<div hide={ activeQueuers && activeQueuers.length } id="right-panel">
       		<h2>Results</h2>
       		<ul id="places"></ul>
       		<button id="more">More results</button>
     	</div>
 
-      <table>
+      <table class="table">
         <thead>
           <tr>
             <th>USER</th>
@@ -47,15 +47,16 @@
         </thead>
         <tbody>
           <tr each={activeQueuers}>
-            <td><img class="user-photo-small" src={ uphoto }>{ uname }</td>
-            <td> not yet </td>
+            <td class="text-left"><img class="user-photo-small" src={ uphoto }>{ uname }</td>
+            <td>{ distance } m</td>
             <td>{ price }</td>
-            <td><button>BUY HERE</button></td>
+            <td><button class="buy-here-btn btn-no-border" hide={ parent.myuid===uid } onclick={ buyHere } ><i class="fa fa-shopping-cart" aria-hidden="true"></i> BUY</button>
+            </td>
           </tr>
         </tbody>
       </table>
-      <button hide={ !activeDestid || isQueuer } onclick={ beQueuer }>I'm in this line! Sell my place!</buttom>
-      <button show={  activeDestid && isQueuer } onclick={ finQueuer }>Cancel to sell :(</buttom>
+      <button class="btn-no-border" hide={ !activeDestid || isQueuer } onclick={ beQueuer } ><i class="fa fa-tags" aria-hidden="true"></i> I'm in this line! Sell my place!</buttom>
+      <button class="btn-no-border" show={  activeDestid && isQueuer } onclick={ finQueuer }><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel to sell</buttom>
 
         </div>
       </div>
@@ -79,16 +80,7 @@
     	    </div>
     	</div>
     </div>
-
-    <div class="" style="z-index:300; margin-top:100px;">
-    <select id="dest-select" onchange={ setMapToDests }>
-      <option each={ dests } value={ destid }>{ name }</option>
-    </select>
-    <button onclick={getDests}>get dest list</button>
-    <button onclick={beQueuer}>Be Queuer Here</button>
-    <button onclick={finQueuer}>Finish Queuer</button>
-
-    </div>
+    <div class="processing-overlay" show={ processing }></div>
 
 <style scoped>
   #infowindow-content {
@@ -98,10 +90,30 @@
     display: inline;
   }
   .user-photo-small {
-    width : 32px;
-    height : 32px;
-    border-radius: 10px;
+    width : 24px;
+    height : 24px;
+    margin-right: 5px;
+    border-radius: 12px;
   }
+  .btn-no-border {
+    background : none;
+    border : none;
+    text-decoration: underline;
+  }
+  .text-left {
+    text-align : left;
+  }
+  .processing-overlay {
+    position: absolute;
+    z-index : 10000;
+    background : #000;
+    opacity : 0.6;
+    width : 100%;
+    height : 100%;
+    top: 0;
+    left: 0;
+  }
+
 </style>
 
       <script>
@@ -111,6 +123,11 @@
             document.getElementById('map').src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBu2giCz9pbupJCZfr_GKXN4ipjsbyFqSQ&q=" + document.getElementById('search').value;
           });
 
+          this.myuid = App.apis.LoginApi.user ? App.apis.LoginApi.user.uid : null;
+          if(!this.myuid){
+            document.location.hash = 'login';
+          }
+
           this.map = new App.apis.LJMapApiClass();
           this.map.createMap('map',{lat:45,lng:139},()=>{
             this.map.moveCurrentLocation(()=>{
@@ -119,6 +136,7 @@
           });
 
           this.map.map.addListener('click',(ev)=>{
+            if(!ev.placeId){return}
             this.map.getPlaceInformation(ev.placeId,(place)=>{
               const location = place.geometry.location;
               App.apis.DbApi.createDestination(place.name,place.place_id,{lat:location.lat(),lng:location.lng()}).then(()=>{
@@ -160,7 +178,8 @@
     this.activeDestid = null;
     this.activeQueuers = [];
     this.isQueuer = false;
-
+    this.myuid = null;
+    this.processing = false;
 
     this.getDests = () => {
       const api = App.apis.DbApi;
@@ -174,11 +193,36 @@
       const api = App.apis.DbApi;
       const uid = App.apis.LoginApi.user.uid;
       const destid = this.activeDestid;
+      const MAX_DIST = 3000;
+
+      this.processing = true;
+      this.update();
+      const endProcessing = ()=>{
+        this.processing = false;
+        this.update();
+      };
+
       this.map.getPos((location)=>{
         const dist = Math.round(this.map.getDist(location),3);
+        if(!dist){
+          alert('Can not detect your location. Turn on location service and try again.');
+          endProcessing();
+          return;
+        }
+        if(dist > MAX_DIST){
+          alert('You are too far from destination. Select right destination, then try again.');
+          endProcessing();
+          return;
+        }
         const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
+        if(!(price*1)){
+          endProcessing();
+          return;
+        }
         api.createQueuer(destid,uid,price,location)
-        .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
+        .then((queuerid)=>{
+          endProcessing();
+        });
       });
     }
 
@@ -195,6 +239,7 @@
       const destid = this.activeDestid;
       let isInited = false;
       // start to watch
+      this.map.clearMarkers();
       api.watchQueuers(destid,(dest,queuers)=>{
         this.map.clearMarkers();
         if(!isInited){
@@ -213,8 +258,15 @@
         this.activeQueuers = queuers;
         this.update();
       });
-
     };
+
+    this.buyHere = (ev)=>{
+      const queuer = ev.item;
+      const isBuy = confirm(`Are you shure you want to buy this location from ${queuer.uname} at a charge of $${queuer.price}`);
+      if(isBuy){
+
+      }
+    }
 
     // this.updateMap = () => {
 //           this.map = new App.apis.LJMapApiClass();
