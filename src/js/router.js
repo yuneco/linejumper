@@ -21,4 +21,11 @@ route('/login', () => {
   riot.mount('stage', 'login');
 });
 
+route('/', () => {
+  if(document.location.hash === ''){
+    document.location.hash = 'login';
+  }
+});
+
+
 export default route;
