@@ -51,7 +51,7 @@ nav, .navbar {
 
 #result-info{
   margin-top:455px;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.25) !important;
 
 }
 
@@ -137,12 +137,10 @@ img.btn {
         right:0;
         z-index: 5;
         border: 1px solid #999;
-        background: #fff;
       }
 
 #left-panel {
       width:100%;
-      background-color:rgba(255,255,255,.5);
 }
 
 #map .dest {
