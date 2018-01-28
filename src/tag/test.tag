@@ -116,6 +116,8 @@
       const uid = App.apis.LoginApi.user.uid;
       const destid = $('#dest-select').val();
       this.map.getPos((location)=>{
+        const dist = Math.round(this.map.getDist(location),3);
+        const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
         api.createQueuer(destid,uid,20,location)
         .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
       });
@@ -144,7 +146,12 @@
         // add queuer marker
         queuers.forEach(q=>{
           console.log('queuer',q.location);
-          this.map.addMarker('queuer',q.location);
+          const qm = this.map.addMarker('queuer',q.location,q);
+          qm.addListener(()=>{
+            const uid = q.uid;
+            const price = q.price;
+            comfirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
+          });
         })
       });
 

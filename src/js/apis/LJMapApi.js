@@ -24,10 +24,20 @@ export default class LJMapApi {
     });
   }
 
+  getDist ({lat,lng}) {
+    const center = this.getCenter();
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(lat,lng),
+      new google.maps.LatLng(center.lat, center.lng),
+    );
+    return distance;
+  }
+
   createMap (elemid, {lat,lng}, callback) {
     this.map = new google.maps.Map(document.getElementById(elemid));
     this.opts = {
       zoom: 17,
+      gestureHandling: 'greedy',
       center: new google.maps.LatLng(lat, lng),
       disableDefaultUI: true,
       disableDoubleClickZoom: true,
@@ -67,7 +77,7 @@ export default class LJMapApi {
     });
   }
 
-  addMarker (className, location) {
+  addMarker (className, location, userData) {
     if(!location){location = this.getCenter()}
     // google map overlay
     const overlay = new google.maps.OverlayView();
@@ -82,7 +92,10 @@ export default class LJMapApi {
       location: new google.maps.LatLng(location.lat, location.lng),
     },className);
     marker.setMap(this.map);
+    marker.userData = userData;
     this.markers.push(marker);
+    return marker;
+
   }
 
   clearMarkers () {
@@ -91,5 +104,7 @@ export default class LJMapApi {
     });
     this.markers.length = 0;
   }
+
+
 
 }
