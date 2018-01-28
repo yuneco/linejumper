@@ -11,12 +11,16 @@
       <p>Try on dev console!</p>
 
       <h2>createUser</h2>
-      <p>Create user entity in DB. uid (1st param) must be current user's id. Other uid will be rejected.
-      You can get id using App.apis.LoginApi.user.uid after logged in.
-
+      <p>Forget me! This api automatically called when you logged-in.
       </p>
       <pre>{codeCreateUser}
       </pre>
+
+      <h2>getUserInfo</h2>
+      <p>Get user profile.</p>
+      <pre>{codeGetUserInfo}
+      </pre>
+
 
       <h2>createDestination</h2>
       <p>Regist location to make a line (e.g. "Apple Store NY)" </p>
@@ -46,15 +50,112 @@
 
 
     <h1>Line Jumper Map</h1>
-
+    <select id="dest-select" onchange={ setMapToDests }>
+      <option each={ dests } value={ destid }>{ name }</option>
+    </select>
+    <button onclick={getDests}>get dest list</button>
+    <button onclick={beQueuer}>Be Queuer Here</button>
+    <button onclick={finQueuer}>Finish Queuer</button>
+    <div id="map"></map>
 
   </div>
+
+  <style>
+    #map {
+      width : 400px;
+      height : 400px;
+      border : 1px solid gray;
+    }
+    #map .dest {
+      font-size : 0;
+    }
+    #map .dest:after {
+      font-size : 20pt;
+      content : '🌟';
+    }
+    #map .queuer {
+      font-size : 0;
+    }
+    #map .queuer:after {
+      font-size : 20pt;
+      content : '🕴';
+    }
+
+  </style>
 
   <script>
     // login
     this.loginWithGoogle = ()=>{
       App.apis.LoginApi.loginWithGoogle();
     }
+
+    this.dests = [];
+    this.map = null;
+    this.mapDestid = null;
+
+    this.on('mount', ()=>{
+      this.map = new App.apis.LJMapApiClass();
+      this.map.createMap('map',{lat:45,lng:139},()=>{
+        this.map.moveCurrentLocation(()=>{
+          //this.map.addMarker('test');
+        });
+      });
+
+    });
+
+    this.getDests = () => {
+      const api = App.apis.DbApi;
+      api.getDestinations().then(dests=>{
+        this.dests = dests;
+        this.update();
+      })
+    };
+
+    this.beQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      const destid = $('#dest-select').val();
+      this.map.getPos((location)=>{
+        const dist = Math.round(this.map.getDist(location),3);
+        const price = prompt(`You are ${dist} m distant from destination. Input selling price($)`,'10.00')
+        api.createQueuer(destid,uid,20,location)
+        .then((queuerid)=>{console.log('create queuer. id = ' + queuerid)});
+      });
+    }
+
+    this.finQueuer = () => {
+      const api = App.apis.DbApi;
+      const uid = App.apis.LoginApi.user.uid;
+      api.finishQueuer(uid);
+    }
+
+
+    this.setMapToDests = () => {
+      const api = App.apis.DbApi;
+      const destid = $('#dest-select').val();
+      let isInited = false;
+      // start to watch
+      api.watchQueuers(destid,(dest,queuers)=>{
+        if(!isInited){
+          console.log('dest',dest,dest.location);
+          this.map.moveLocation(dest.location);
+          this.map.addMarker('dest',dest.location);
+          isInited = true;
+        }
+        this.map.clearMarkers();
+        // add queuer marker
+        queuers.forEach(q=>{
+          console.log('queuer',q.location);
+          const qm = this.map.addMarker('queuer',q.location,q);
+          qm.addListener(()=>{
+            const uid = q.uid;
+            const price = q.price;
+            comfirm(`Do you want to buy this position from ${uid}? Price : $${price}`);
+          });
+        })
+      });
+
+    };
 
 
     // -------- sample code -----------
@@ -64,8 +165,10 @@ if(App.apis.LoginApi.user){ // Login After Only
 }`;
 
     this.codeCreateDestination = `var api = App.apis.DbApi;
-api.createDestination('Apple Store GINZA',{lat:35.672256, lng:139.765812})
-  .then((destid)=>{console.log('destination created: id = ' + destid)});`;
+    // place name, dest id (use place-id provided by result of google api), location
+    // if same dest id exists, just over written by new value.
+api.createDestination('Apple Store GINZA','google-place-id-12345',{lat:35.672256, lng:139.765812})
+  .then(()=>{console.log('added!')});`;
 
     this.codeCreateQueuer = `var api = App.apis.DbApi;
 // destid , queuer's uid , price , location(lat,lng)
@@ -79,11 +182,14 @@ api.updateQueuerLocation('-L3qqhYnX15fXYHjQs5s',{lat:50,lng:60});`;
 api.getDestinations().then(dests=>{console.log(dests)})`;
 
     this.codeWatchQueuers = `var api = App.apis.DbApi;
-const callback = (destid,queuers)=>{console.log(destid,queuers)};
+const callback = (dest,queuers)=>{console.log(dest,queuers)};
 // start to watch
 api.watchQueuers('-L3qo1xvBcYmOLKmuiOA',callback);
 // stop to watch
 api.watchQueuers('-L3qo1xvBcYmOLKmuiOA',null);`;
+
+    this.codeGetUserInfo = `var api = App.apis.DbApi;
+api.getUserInfo('iuGUa6TFU4PYiNnGL1BeaJmaouP2').then(user=>{console.log(user)})`;
 
   </script>
 
