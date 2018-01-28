@@ -4,20 +4,20 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="https://@@common.fqdn/img/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" href="https://@@common.fqdn/img/icon-home.png">
+    <link rel="shortcut icon" href="https://linejumper-a1b5e.firebaseapp.com/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="https://linejumper-a1b5e.firebaseapp.com/img/icon-home.png">
     <!--OGP対応-->
     <meta property="og:title" content="LineJumper" >
     <meta property="og:type" content="website" >
-    <meta property="og:url" content="https://@@common.fqdn/" >
-    <meta property="og:image" content="https://@@common.fqdn/img/ogptag.jpg" >
+    <meta property="og:url" content="https://linejumper-a1b5e.firebaseapp.com/" >
+    <meta property="og:image" content="https://linejumper-a1b5e.firebaseapp.com/img/ogptag.jpg" >
     <meta property="og:site_name" content="LineJumper" >
     <meta property="og:description" content="" >
     <!--Twitter-->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LineJumper">
     <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="https://@@common.fqdn/img/ogptag.jpg">
+    <meta name="twitter:image" content="https://linejumper-a1b5e.firebaseapp.com/img/ogptag.jpg">
     <title>LineJumper</title>
     <meta name="description" content="" />
      <!-- Bootstrap -->
@@ -34,12 +34,25 @@
     <app></app>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP2LrDeqpZ2Js28hAZBQ78TWdRwzIthIo"></script>
+
+    <!-- Google API -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP2LrDeqpZ2Js28hAZBQ78TWdRwzIthIo"></script> -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP2LrDeqpZ2Js28hAZBQ78TWdRwzIthIo&libraries=places"></script>
+
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMf1KTIzyqQqLf1QmNic4xcq7hGp_wE7s&libraries=places&callback=initMap" async defer></script> -->
+
     <script src="js/main.js"></script>
     <script src="js/tags.js"></script>
+<!--     <script src="inc/map.js"></script> -->
 
     <script>
         App.init({});
+    </script>
+
+    <script type="text/javascript">
+
+
+
     </script>
 
     <!-- Footer -->

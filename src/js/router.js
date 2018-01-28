@@ -9,4 +9,12 @@ route('/home', () => {
   riot.mount('stage', 'home');
 });
 
+route('/open', () => {
+  riot.mount('stage', 'open');
+});
+
+route('/login', () => {
+  riot.mount('stage', 'login');
+});
+
 export default route;

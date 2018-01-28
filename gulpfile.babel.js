@@ -72,7 +72,7 @@ gulp.task('script', bundleJs);
 // 必要な時に直接呼び出すか、gulp buildしてください
 gulp.task('cpResource', function () {
     return gulp.src(
-        ['src/img/**/*', 'src/fonts/**/*'],
+        ['src/img/**/*', 'src/fonts/**/*', 'src/inc/**/*'],
         { base: 'src' }
     )
         .pipe(gulp.dest(pathDest));
