@@ -23,12 +23,6 @@
 <!--                 <input type="text" class="searchBar" name="search" id="search" placeholder="Search"> -->
 
 		  <div id="map"></div>
-      <div id="infowindow-content">
-        <img id="place-icon" src="" height="16" width="16">
-        <span id="place-name"  class="title"></span><br>
-        Place ID <span id="place-id"></span><br>
-        <span id="place-address"></span>
-      </div>
 
     	<div hide={ activeQueuers && activeQueuers.length } id="right-panel">
       		<h2>Results</h2>
@@ -36,27 +30,19 @@
       		<button id="more">More results</button>
     	</div>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th>USER</th>
-            <th>DISTANCE</th>
-            <th>PRICE</th>
-            <th>BUY</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr each={activeQueuers}>
-            <td class="text-left"><img class="user-photo-small" src={ uphoto }>{ uname }</td>
-            <td>{ distance } m</td>
-            <td>{ price }</td>
-            <td><button class="buy-here-btn btn-no-border" hide={ parent.myuid===uid } onclick={ buyHere } ><i class="fa fa-shopping-cart" aria-hidden="true"></i> BUY</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="btn-no-border" hide={ !activeDestid || isQueuer } onclick={ beQueuer } ><i class="fa fa-tags" aria-hidden="true"></i> I'm in this line! Sell my place!</buttom>
-      <button class="btn-no-border" show={  activeDestid && isQueuer } onclick={ finQueuer }><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel Your Sale</buttom>
+
+      <ul class="queuer-list no-photo">
+        <li class="queuer-list-item" each={activeQueuers} onclick={buyHere}>
+          <div class="bg"></div>
+          <div class="price" >${ price }</div>
+          <div class="dist" >{ distance } m</div>
+          <div class="name">{ uname }</div>
+        </li>
+      </ul>
+
+
+      <button class="btn-no-border" hide={ !activeDestid || isQueuer } onclick={ beQueuer } ><i class="fa fa-tags" aria-hidden="true"></i> I'm in this line! Sell my place!</button>
+      <button class="btn-no-border" show={  activeDestid && isQueuer } onclick={ finQueuer }><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel Your Sale</button>
 
         </div>
       </div>
@@ -64,6 +50,17 @@
     	</div>
     </div>
     <div class="processing-overlay" show={ processing }></div>
+    <div class="buy-confirm" show={ isSelected } >
+      <div class="photo"></div>
+      <div class="message">
+        Are you sure you want to buy this location from {selectedQueuer.uname} for a charge of ${selectedQueuer.price}?
+      </div>
+      <div class="buttons">
+        <button class="cancel-btn" onclick={buyHereCanceled}>CANCEL</button>
+        <button onclick={buyHereConfirmed}>BUY HERE</button>
+      </div>
+    </div>
+
 
 <style scoped>
   #infowindow-content {
@@ -104,6 +101,145 @@
     top: 0;
     left: 0;
   }
+
+  .queuer-list {
+    white-space : nowrap;
+    overflow-x : scroll;
+    padding : 0;
+  }
+
+  .queuer-list-item {
+    display : inline-block;
+    width : 130px;
+    height : 130px;
+    border : red;
+    position: relative;
+    padding-top : 40px;
+  }
+
+  .queuer-list-item .photo {
+    width : 110px;
+    height : 110px;
+    left: 10px;
+    top : 10px;
+    border-radius: 55px;
+    border: 1px solid #888;
+    position: absolute;
+    z-index : -1;
+  }
+
+  .queuer-list-item .bg {
+    width : 110px;
+    height : 110px;
+    left: 10px;
+    top : 10px;
+    background: #ef7778;
+    border-radius: 55px;
+    position: absolute;
+    z-index : -1;
+  }
+
+
+  .queuer-list-item .price {
+    font-size : 20pt;
+    width : 100%;
+    text-align : center;
+    color : white;
+    text-shadow: 1px 1px 0px #333a,
+    -1px 1px 0px #333a,
+    1px -1px 0px #333a,
+    -1px -1px 0px #333a;
+  }
+
+  .queuer-list-item .dist {
+    font-size : 14pt;
+    width : 100%;
+    text-align : center;
+    color : white;
+    text-shadow: 1px 1px 0px #333a,
+    -1px 1px 0px #333a,
+    1px -1px 0px #333a,
+    -1px -1px 0px #333a;
+  }
+
+  .queuer-list-item .name {
+    font-size : 12pt;
+    width : 100%;
+    text-align : center;
+    color : #000;
+    padding-top : 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .no-photo .queuer-list-item .price {
+    font-size : 20pt;
+    width : 100%;
+    text-align : center;
+    color : white;
+    text-shadow: none;
+  }
+
+  .no-photo .queuer-list-item .dist {
+    font-size : 14pt;
+    width : 100%;
+    text-align : center;
+    color : white;
+    text-shadow: none;
+  }
+
+  .buy-confirm {
+    position : absolute;
+    z-index : 10000;
+    width : 90%;
+    height : 90%;
+    left : 5%;
+    top : 5%;
+    border : 1px solid #888;
+    background-color: white;
+    box-shadow:0px 0px 26px 3px rgba(61,61,61,0.75);
+  }
+
+  .buy-confirm .photo{
+    width : 100%;
+    height : 50%;
+    background-size : cover;
+  }
+
+  .buy-confirm .message{
+    width : 90%;
+    margin-left : 5%;
+    margin-top : 40px;
+    text-align : center;
+    font-size : 14pt;
+    color : #000;
+  }
+
+  .buy-confirm .buttons{
+    width : 90%;
+    margin-left : 5%;
+    position : absolute;
+    bottom : 30px;
+  }
+  .buy-confirm .buttons button{
+    color : white;
+    background: #ef7778;
+    border-radius: 20px;
+    border : none;
+    padding : 4px 20px;
+    display : inline-block;
+    height : 40px;
+    font-size : 13pt;
+    margin : 0 10px;
+  }
+
+  .buy-confirm .buttons .cancel-btn {
+    color : #ef7778;
+    background: white;
+    border : 1px solid #ef7778
+
+  }
+
 
 </style>
 
@@ -172,6 +308,8 @@
     this.isQueuer = false;
     this.myuid = null;
     this.processing = false;
+    this.isSelected = false;
+    this.selectedQueuer = false;
 
     this.getDests = () => {
       const api = App.apis.DbApi;
@@ -254,13 +392,28 @@
 
     this.buyHere = (ev)=>{
       const queuer = ev.item;
-      const isBuy = confirm(`Are you sure you want to buy this location from ${queuer.uname} for a charge of $${queuer.price}`);
-      if(isBuy){
-        App.apis.DbApi.buyPosition(this.myuid, queuer.queuerid).then(()=>{
-          document.location.hash = 'recept';
-        });
-      }
+      this.isSelected = true;
+      this.selectedQueuer = queuer;
+      $('.buy-confirm .photo').css({backgroundImage: `url('${queuer.uphoto}')`});
+      this.update();
     }
+
+    this.buyHereConfirmed = (ev)=>{
+      const queuer = this.selectedQueuer;
+      this.isSelected = false;
+      this.selectedQueuer = null;
+      this.update();
+      App.apis.DbApi.buyPosition(this.myuid, queuer.queuerid).then(()=>{
+        document.location.hash = 'recept';
+      });
+    }
+
+    this.buyHereCanceled = (ev)=>{
+      this.isSelected = false;
+      this.selectedQueuer = null;
+      this.update();
+    }
+
 
     this.about = ()=>{
         window.clearInterval(this.timerid);
