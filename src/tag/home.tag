@@ -42,6 +42,7 @@
             <th>USER</th>
             <th>DISTANCE</th>
             <th>PRICE</th>
+            <th>BUY</th>
           </tr>
         </thead>
         <tbody>
@@ -49,6 +50,7 @@
             <td><img class="user-photo-small" src={ uphoto }>{ uname }</td>
             <td> not yet </td>
             <td>{ price }</td>
+            <td><button>BUY HERE</button></td>
           </tr>
         </tbody>
       </table>
