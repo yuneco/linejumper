@@ -1,6 +1,6 @@
 <login>
 
-  <div class="title">
+  <div class="title" id="gif_animata">
 <!--   <embed src="inc/Logo.mp4" width="600" height="400" scale="aspect" controller="False"> -->
 <!--   <video width="90%" height="400" autoplay="autoplay"><source src="inc/Logo.mp4" type="video/mp4"/></video> -->
   </div><br/>
@@ -8,7 +8,7 @@
 
 <button class="login-google-btn" onclick={loginWithGoogle} ><i class="fa fa-google" aria-hidden="true"></i> Login with Google</button>
 
-<style scoped>
+<style>
   .title {
     height: 50%;
     background-image: url('inc/Logo.gif');
@@ -29,6 +29,10 @@
 </style>
 
 <script>
+  var gifSource = $('#gif_animata').attr('src'); //get the source in the var
+    $('#gif_animata').attr('src', ""); //erase the source
+    $('#gif_animata').attr('src', gifSource+"?"+new Date().getTime());
+
   this.timerid = null;
   this.on('mount',()=>{
     this.timerid = window.setInterval(()=>{
