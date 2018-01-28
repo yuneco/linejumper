@@ -9,7 +9,7 @@ export default class LJMapApi {
     this.defaultLatLng = {
       lat: 43.0686606,
       lng: 141.3485666
-    }
+    };
   }
   getPos (callback) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -50,6 +50,7 @@ export default class LJMapApi {
 
     this.map.addListener('projection_changed', () => {
       this.mapReady = true;
+      this.placesService = new google.maps.places.PlacesService(this.map);
       callback();
     });
   }
@@ -105,6 +106,15 @@ export default class LJMapApi {
     this.markers.length = 0;
   }
 
-
+  getPlaceInformation (placeId,callback) {
+    this.placesService.getDetails({placeId}, (place, status)=>{
+      if (status === 'OK') {
+        console.log(place);
+        callback(place);
+      }else{
+        callback(null);
+      }
+    });
+  }
 
 }
