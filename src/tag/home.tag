@@ -117,6 +117,7 @@
           this.myuid = App.apis.LoginApi.user ? App.apis.LoginApi.user.uid : null;
           if(!this.myuid){
             document.location.hash = 'login';
+            return;
           }
 
           this.map = new App.apis.LJMapApiClass();

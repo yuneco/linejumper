@@ -145,7 +145,7 @@ export default {
     let queuer = null;
     return qref.once('value').then(qsnap=>{
       queuer = qsnap.val();
-      //qref.set(null);
+      qref.set(null);
     }).then(()=>{
       const uref = root.child(`users/${myuid}`);
       return uref.update({

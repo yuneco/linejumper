@@ -4,7 +4,7 @@
   <img class="queuerPhoto" src={ queuerPhoto } >
   <h1>{ queuerName }</h1>
   <div>Go to 🚩 and show this screen to { queuerName }</div>
-  <button onclick={clearBought}>DONE</button>
+  <button class="done-btn" onclick={clearBought}>DONE</button>
 </div>
 
 <style scoped>
@@ -28,6 +28,15 @@
     height : 64px;
     border-radius : 32px;
     margin : 10px;
+  }
+  .done-btn {
+    margin-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    color: #ffffff;
+    padding: 10px 20px;
+    background-color:#ef7778;
+    border-radius:25px;
   }
 </style>
 
